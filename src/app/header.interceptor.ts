@@ -2,7 +2,7 @@ import { HttpInterceptorFn } from '@angular/common/http';
 
 export const headerInterceptor: HttpInterceptorFn = (req, next) => {
    let token: string | null = null;
-
+debugger;
   if (typeof window !== 'undefined' && localStorage) {
     token = localStorage.getItem("token");
   }

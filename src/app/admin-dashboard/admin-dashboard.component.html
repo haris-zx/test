@@ -1,0 +1,54 @@
+<!-- src/app/components/admin-dashboard.component.html -->
+<div class="container mt-3">
+  <h2 class="mb-3">Task Management (Admin)</h2>
+
+  <!-- Filters Form -->
+  <form [formGroup]="filterForm" class="row mb-4">
+    <div class="col-md-4">
+      <input type="text" class="form-control" placeholder="Search task..." formControlName="search" />
+    </div>
+    <div class="col-md-4">
+      <select class="form-control" formControlName="status">
+        <option value="">All Status</option>
+        <option value="0">Pending</option>
+        <option value="1">In Progress</option>
+        <option value="2">Completed</option>
+        <option value="3">Canceled</option>
+      </select>
+    </div>
+    <div class="col-md-4">
+      <select class="form-control" formControlName="priority">
+        <option value="">All Priority</option>
+        <option value="0">Low</option>
+        <option value="1">Medium</option>
+        <option value="2">High</option>
+        <option value="3">Critical</option>
+      </select>
+    </div>
+  </form>
+
+  <!-- Tasks Table -->
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Priority</th>
+        <th>Tags</th>
+        <th>Due Date</th>
+        <th>Created</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let task of tasks">
+        <td>{{ task.title }}</td>
+        <td>{{ getStatusText(task.status) }}</td>
+        <td>{{ getPriorityText(task.priority) }}</td>
+        <td>{{ task.tags }}</td>
+        <td>{{ task.dueDate | date }}</td>
+        <td>{{ task.createdAt | date: 'short' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>

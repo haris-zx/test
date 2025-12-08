@@ -1,17 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthServiceService } from '../../auth-service.service';
+import { CommonModule } from '@angular/common';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [],
+   imports: [
+     CommonModule,
+     ReactiveFormsModule,NgbModule
+   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
  loginForm!: FormGroup;
 
-  constructor(private fb: FormBuilder,private authService: AuthServiceService) {}
+  constructor(private fb: FormBuilder,private authService: AuthServiceService,private router:Router) {}
 
   ngOnInit() {
     this.loginForm = this.fb.group({
@@ -28,32 +34,34 @@ export class LoginComponent {
       console.log('Email:', email);
       console.log('Password:', password);
    this.authService.login(this.loginForm.value).subscribe({
-        next: (response) => console.log('Signup success:', response),
-        error: (err) => console.error('Signup error:', err)
+        next: (response: any) => {
+    console.log('Signup success:', response);
+        localStorage.setItem("token", response.token); 
+    localStorage.setItem("role", response.role);
+    localStorage.setItem("refreshToken", response.refreshToken);
+    localStorage.setItem("orgId",response.orgId);
+    localStorage.setItem("Id",response.id);
+    debugger;
+          if(response.role=="Employee"){
+              this.router.navigateByUrl('/task')
 
-      //  localStorage.setItem("token",response.token)
-//       localStorage.setItem("role",response.role)
-//       localStorage.setItem("refreshToken",response.refreshToken)
-//      
-//  if(response.role==="Employee"){
-//         this.router.navigateByUrl('/addEmployee')
-//       }
-//else if(response.role==="manager"){
-// this.router.navigateByUrl('/manager')
-//       }
+    }
+    else if(response.role=="Manager"){
+              this.router.navigateByUrl('/managerDashboard')
 
-//       else{
-//       this.router.navigateByUrl('/Admin')
-      
-//       }
-//     });
+    }
+    else if(response.role=="Admin"){
+              this.router.navigateByUrl('/adminDashboard')
 
-        
-      });
-      
+    }
+  },
+  
+      error: (err) => {
+    console.error('Signup error:', err);
+  }
+})
 
-    } else {
-      console.log('Form is invalid');
+      alert('login successful!');
     }
   }
 }

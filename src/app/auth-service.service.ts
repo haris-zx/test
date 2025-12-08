@@ -19,7 +19,7 @@ export class AuthServiceService {
   }
 
    login(data:any){
-
+   debugger;
     const loginUrl='https://localhost:7063/api/User/login'
      return this.http.post(loginUrl,data,{ withCredentials: true} );
 

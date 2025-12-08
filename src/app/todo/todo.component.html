@@ -1,0 +1,125 @@
+<!-- src/app/components/task/task.component.html -->
+
+<div class="container mt-5">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="card-title mb-0">Tasks</h2>
+        <button 
+          class="btn btn-primary"
+          (click)="showForm = !showForm">
+          {{ showForm ? 'Cancel' : 'Create Task' }}
+        </button>
+      </div>
+
+      <!-- Task form (toggle visibility) -->
+      <div *ngIf="showForm" class="mb-4">
+        <form [formGroup]="taskForm" (ngSubmit)="createTask()">
+          <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input 
+              type="text"
+              class="form-control"
+              formControlName="title"
+              placeholder="Enter task title"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Status</label>
+          <select formControlName="status">
+<option [ngValue]="0">Pending</option>
+  <option [ngValue]="1">In Progress</option>
+  <option [ngValue]="2">Completed</option>
+  <option [ngValue]="3">Canceled</option>
+</select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Priority</label>
+          <select formControlName="priority">
+  <option [ngValue]="0">Low</option>
+  <option [ngValue]="1">Medium</option>
+  <option [ngValue]="2">High</option>
+  <option [ngValue]="3">Critical</option>
+</select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Tags</label>
+            <input 
+              type="text"
+              class="form-control"
+              formControlName="tags"
+              placeholder="Tags (comma-separated)"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Due Date</label>
+            <input 
+              type="date"
+              class="form-control"
+              formControlName="dueDate"
+            />
+          </div>
+
+          <button type="submit" class="btn btn-success w-100">Save Task</button>
+        </form>
+      </div>
+
+     
+    </div>
+  </div>
+<div *ngIf="tasks" class="mt-4">
+  <h3 class="mb-3">Task Details</h3>
+
+  <table class="table table-bordered text-center">
+    <thead class="table-light">
+      <tr>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Priority</th>
+        <th>Tags</th>
+        <th>Due Date</th>
+        <th>Created</th>
+      </tr>
+    </thead>
+
+    <tbody *ngFor="let task of tasks">
+    <tr >
+        <td>{{ task.title }}</td>
+
+        <td>
+          <span [ngClass]="{
+            'badge bg-warning': task.status === 0,
+            'badge bg-primary': task.status === 1,
+            'badge bg-success': task.status === 2,
+            'badge bg-danger': task.status === 3
+          }">
+            {{ getStatusName(task.status) }}
+          </span>
+        </td>
+
+        <td>
+          <span [ngClass]="{
+            'badge bg-secondary': task.priority === 0,
+            'badge bg-info': task.priority === 1,
+            'badge bg-warning': task.priority === 2,
+            'badge bg-danger': task.priority === 3
+          }">
+            {{ getPriorityName(task.priority) }}
+          </span>
+        </td>
+
+        <td>{{ task.tags }}</td>
+          <td>{{ task.dueDate | date }}</td>
+        <td>{{ task.createdAt | date: 'short' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+</div>
